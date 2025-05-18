@@ -1,0 +1,30 @@
+config:
+  target: 'http://my-app-alb-903367878.eu-north-1.elb.amazonaws.com'
+  phases:
+    
+    - duration: 60  
+      arrivalRate: 200 
+
+ 
+    - duration: 400 
+      arrivalRate: 500
+      rampTo: 1000    
+      
+    # Фаза 3: Підтримка високого навантаження (опціонально)
+    # - duration: 120
+    #   arrivalRate: 25
+
+  # (Опціонально) Якщо ваш додаток використовує стиснення, наприклад gzip
+  # http:
+  #   gunzip: true
+  #   timeout: 20 # Таймаут для запитів
+
+scenarios:
+  - name: "Access Homepage" # Назва сценарію
+    flow:
+      - get:
+          url: "/" # Надсилаємо GET-запит до кореневого шляху
+      # Якщо у вас є інші шляхи, можете додати їх тут:
+      # - get:
+      #     url: "/some-other-page"
+      # - think: 1 # "Подумати" 1 секунду перед наступним запитом
