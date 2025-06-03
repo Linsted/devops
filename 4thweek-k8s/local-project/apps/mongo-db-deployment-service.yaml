@@ -1,0 +1,52 @@
+# deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-db-deployment
+  labels:
+    app: mongo-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-db
+  template:
+    metadata:
+      labels:
+        app: mongo-db
+    spec:
+      containers:
+      - name: mongo-db
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-db-secret
+              key: mongo-root-username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-db-secret
+              key: mongo-root-password
+        resources: 
+          requests:
+            memory: "256Mi"
+            cpu: "250m" # 250m = 0.25 CPU core
+          limits:
+            memory: "512Mi"
+            cpu: "500m" # 500m = 0.5 CPU core
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-db-service
+spec:
+  selector:
+    app: mongo-db
+  ports:
+  - protocol: TCP
+    port: 27017
+    targetPort: 27017
