@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: volume-app-service
+spec:
+  selector:
+    app: volume-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+  type: LoadBalancer
+---
+# This is the Kubernetes Deployment for the volume-app service.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volume-app-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: volume-app
+  template:
+    metadata:
+      labels:
+        app: volume-app
+    spec:
+      containers:
+      - name: volume-app
+        image: linsted/volume-app:v1
+        volumeMounts: 
+          - mountPath: /app/story
+            name: volume-app-storage
+      volumes:
+        - name: volume-app-storage
+          hostPath:
+            path: /data
+            type: DirectoryOrCreate  # Ensure the directory is created if it doesn't exist
