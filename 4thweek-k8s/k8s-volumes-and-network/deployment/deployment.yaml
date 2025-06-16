@@ -34,6 +34,5 @@ spec:
             name: volume-app-storage
       volumes:
         - name: volume-app-storage
-          hostPath:
-            path: /data
-            type: DirectoryOrCreate  # Ensure the directory is created if it doesn't exist
+          persistentVolumeClaim: 
+            claimName: volume-app-pvc
