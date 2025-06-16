@@ -28,7 +28,13 @@ spec:
     spec:
       containers:
       - name: volume-app
-        image: linsted/volume-app:v1
+        image: linsted/volume-app:v2
+        env:
+          - name: STORY_FOLDER
+            valueFrom: 
+              configMapKeyRef:
+                name: volume-app-config
+                key: folder
         volumeMounts: 
           - mountPath: /app/story
             name: volume-app-storage
