@@ -29,11 +29,11 @@ spec:
       containers:
       - name: k8s-deployment
         image: linsted/k8s-networking:latest
+        imagePullPolicy: Always
         env:
           - name: AUTH_ADDRESS
-            value: localhost #hardcoded for now
-      - name: auth
-        image: linsted/k8s-networking:auth-api
+        #   value: localhost #hardcoded for now
+            value: "auth-service.default"
         # resources:
         #   limits:
         #     memory: "128Mi"

@@ -24,13 +24,15 @@ app.post("/signup", async (req, res) => {
 
   try {
     const hashedPW = await axios.get(
-      `http://${print.env.AUTH_ADDRESS}/hashed-password/` + password
+      `http://${process.env.AUTH_ADDRESS}/hashed-password/` + password
     );
     //  const hashedPW = "dslfnlsdknf"; // Simulating a hashed password response
 
     // since it's a dummy service, we don't really care for the hashed-pw either
     console.log(hashedPW, email);
-    res.status(201).json({ message: "User created!" });
+    res
+      .status(201)
+      .json({ message: "User created!", env: process.env.AUTH_ADDRESS });
   } catch (err) {
     console.log(err);
     return res
@@ -58,7 +60,10 @@ app.post("/login", async (req, res) => {
   // normally, we'd find a user by email and grab his/ her ID and hashed password
   const hashedPassword = password + "_hash";
   const response = await axios.get(
-    `http://${print.env.AUTH_ADDRESS}/token/` + hashedPassword + "/" + password
+    `http://${process.env.AUTH_SERVICE_SERVICE_HOST}/token/` +
+      hashedPassword +
+      "/" +
+      password
   );
   // const response = {
   //   status: 200,
